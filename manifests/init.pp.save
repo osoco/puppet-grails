@@ -1,0 +1,29 @@
+define grails ($version, $destination, $user = "root") {
+
+    include wget
+
+    file { "$destination-$version":
+        path => "$destination",
+        ensure => 'directory',
+        owner => "$user",
+        group => "$user",
+        mode => '0755'
+    }
+
+    package { "unzip":
+        ensure => latest
+    }
+
+    wget::fetch { "grails-$version-download":
+        source => "http://dist.codehaus.org/grails/grails-$version.zip",
+        destination => "$destination/grails-$version.zip",
+        require => File["$destination"]
+    }
+
+    exec { "unzip-grails-$version":
+        command => "unzip $destination/grails-$version.zip",
+        cwd => "$destination",
+        creates => "$destination/grails-$version",
+        require => [Wget::Fetch["grails-$version-download"], Package['unzip']],
+    }
+}
