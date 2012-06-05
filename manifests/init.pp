@@ -25,16 +25,18 @@ define grails ($version, $destination, $user = "root") {
     }
     notify { "The base url for grails $version is '$base_url'": }
 
-    wget::fetch { "grails-$version-download":
-        source => "$base_url/grails-$version.zip",
-        destination => "$destination/grails-$version.zip",
-        require => File["$destination"]
-    }
+    if !defined(Wget::Fetch["grails-$version-download"]) {
+        wget::fetch { "grails-$version-download":
+            source => "$base_url/grails-$version.zip",
+            destination => "$destination/grails-$version.zip",
+            require => File["$destination"]
+        }
 
-    exec { "unzip-grails-$version":
-        command => "unzip grails-$version.zip",
-        cwd => "$destination",
-        creates => "$destination/grails-$version",
-        require => [Wget::Fetch["grails-$version-download"], Package['unzip']],
+        exec { "unzip-grails-$version":
+            command => "unzip grails-$version.zip",
+            cwd => "$destination",
+            creates => "$destination/grails-$version",
+            require => [Wget::Fetch["grails-$version-download"], Package['unzip']],
+        }
     }
 }
