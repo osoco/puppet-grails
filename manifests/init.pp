@@ -17,7 +17,7 @@ define grails ($version, $destination, $user = "root") {
         }
     }
 
-    if "$version" =~ /(1.3.[6-9]|2.*)/ {
+    if "$version" =~ /^1\.3\.[6-9]|^2\..*/ {
        $base_url = "http://dist.springframework.org.s3.amazonaws.com/release/GRAILS"
     }
     else {
