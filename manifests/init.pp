@@ -12,7 +12,7 @@ define grails ($version, $destination, $user = 'root') {
     }
 
     if !defined(Package['unzip']) {
-        package { "unzip":
+        package { 'unzip':
             ensure => latest
         }
     }
