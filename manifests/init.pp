@@ -37,6 +37,7 @@ define grails ($version, $destination, $user = 'root') {
         exec { "unzip-grails-${version}":
             command => "unzip grails-${version}.zip",
             cwd     => $destination,
+            path    => '/usr/bin',
             creates => "${destination}/grails-${version}",
             require => [Wget::Fetch["grails-${version}-download"], Package['unzip']],
         }
